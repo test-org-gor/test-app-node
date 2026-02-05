@@ -5,7 +5,6 @@ describe('Health Endpoints', () => {
   describe('GET /health', () => {
     it('should return health status', async () => {
       const response = await request(app).get('/health');
-      
       expect(response.status).toBe(200);
       expect(response.body).toHaveProperty('status', 'healthy');
       expect(response.body).toHaveProperty('timestamp');
@@ -17,7 +16,6 @@ describe('Health Endpoints', () => {
   describe('GET /health/live', () => {
     it('should return alive status', async () => {
       const response = await request(app).get('/health/live');
-      
       expect(response.status).toBe(200);
       expect(response.body).toEqual({ status: 'alive' });
     });
@@ -26,7 +24,6 @@ describe('Health Endpoints', () => {
   describe('GET /health/ready', () => {
     it('should return ready status', async () => {
       const response = await request(app).get('/health/ready');
-      
       expect(response.status).toBe(200);
       expect(response.body).toEqual({ status: 'ready' });
     });

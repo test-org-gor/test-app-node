@@ -7,15 +7,11 @@ interface HealthResponse {
   timestamp: string;
   uptime: number;
   version: string;
-  memory: {
-    used: number;
-    total: number;
-  };
+  memory: { used: number; total: number };
 }
 
 router.get('/', (_req: Request, res: Response) => {
   const memUsage = process.memoryUsage();
-  
   const health: HealthResponse = {
     status: 'healthy',
     timestamp: new Date().toISOString(),
@@ -26,7 +22,6 @@ router.get('/', (_req: Request, res: Response) => {
       total: Math.round(memUsage.heapTotal / 1024 / 1024),
     },
   };
-
   res.json(health);
 });
 
@@ -35,7 +30,6 @@ router.get('/live', (_req: Request, res: Response) => {
 });
 
 router.get('/ready', (_req: Request, res: Response) => {
-  // Add readiness checks here (DB, cache, etc.)
   res.status(200).json({ status: 'ready' });
 });
 

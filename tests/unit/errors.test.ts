@@ -1,4 +1,9 @@
-import { AppError, ValidationError, NotFoundError, UnauthorizedError } from '../../src/utils/errors';
+import {
+  AppError,
+  ValidationError,
+  NotFoundError,
+  UnauthorizedError,
+} from '../../src/utils/errors';
 
 describe('Error Classes', () => {
   describe('AppError', () => {

@@ -3,7 +3,6 @@ import helmet from 'helmet';
 import cors from 'cors';
 import compression from 'compression';
 import rateLimit from 'express-rate-limit';
-
 import { config } from './config';
 import { logger } from './utils/logger';
 import { healthRouter } from './routes/health';
@@ -13,41 +12,34 @@ import { AppError } from './utils/errors';
 
 const app: Application = express();
 
-// Security middleware
 app.use(helmet());
 app.use(cors({ origin: config.corsOrigin }));
 app.use(compression());
 
-// Rate limiting
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
+  windowMs: 15 * 60 * 1000,
   max: 100,
   standardHeaders: true,
   legacyHeaders: false,
 });
 app.use(limiter);
 
-// Body parsing
 app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: true }));
 
-// Request logging
 app.use((req: Request, _res: Response, next: NextFunction) => {
   logger.debug(`${req.method} ${req.path}`);
   next();
 });
 
-// Routes
 app.use('/health', healthRouter);
 app.use('/api/items', itemsRouter);
 app.use('/api/users', usersRouter);
 
-// 404 handler
 app.use((_req: Request, _res: Response, next: NextFunction) => {
   next(new AppError('Not Found', 404));
 });
 
-// Global error handler
 app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
   if (err instanceof AppError) {
     return res.status(err.statusCode).json({
@@ -55,7 +47,6 @@ app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
       message: err.message,
     });
   }
-
   logger.error('Unexpected error:', err);
   return res.status(500).json({
     status: 'error',
